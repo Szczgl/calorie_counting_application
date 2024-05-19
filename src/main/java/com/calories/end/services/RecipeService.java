@@ -1,14 +1,21 @@
 package com.calories.end.services;
 
+import com.calories.end.domain.Ingredient;
 import com.calories.end.domain.Recipe;
+import com.calories.end.domain.User;
 import com.calories.end.dto.RecipeDTO;
 import com.calories.end.exception.RecipeNotFoundException;
+import com.calories.end.exception.UserNotFoundException;
 import com.calories.end.mapper.RecipeMapper;
 import com.calories.end.repository.RecipeRepository;
+import com.calories.end.repository.UserRepository;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,8 +23,12 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class RecipeService {
 
+    @PersistenceContext
+    private EntityManager entityManager;
+
     private final RecipeRepository recipeRepository;
     private final RecipeMapper recipeMapper;
+    private final UserRepository userRepository;
 
     public List<RecipeDTO> getAllRecipes() {
         return recipeRepository.findAll().stream()
@@ -31,9 +42,12 @@ public class RecipeService {
         return recipeMapper.mapToRecipeDto(recipe);
     }
 
-    public RecipeDTO saveRecipe(RecipeDTO recipeDto) {
+    public Recipe saveRecipe(RecipeDTO recipeDto) throws UserNotFoundException {
         Recipe recipe = recipeMapper.mapToRecipe(recipeDto);
-        return recipeMapper.mapToRecipeDto(recipeRepository.save(recipe));
+        User user = userRepository.findById(recipeDto.getUserId())
+                .orElseThrow(() -> new UserNotFoundException("User not found with id: " + recipeDto.getUserId()));
+        recipe.setUser(user);
+        return recipeRepository.save(recipe);
     }
 
     public void deleteRecipe(Long id) {

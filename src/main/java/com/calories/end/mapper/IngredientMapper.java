@@ -41,4 +41,10 @@ public class IngredientMapper {
                 .map(this::mapToIngredientDto)
                 .collect(Collectors.toList());
     }
+
+    public List<Ingredient> mapToIngredientList(List<IngredientDTO> ingredientDtos) {
+        return ingredientDtos.stream()
+                .map(this::mapToIngredient)
+                .collect(Collectors.toList());
+    }
 }

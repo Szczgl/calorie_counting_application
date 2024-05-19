@@ -14,5 +14,5 @@ public class RecipeDTO {
     private int totalCalories;
     private String translatedDescription;
     private Long userId;
-    private List<IngredientDTO> ingredients;
+    private Set<Long> ingredientIds;
 }

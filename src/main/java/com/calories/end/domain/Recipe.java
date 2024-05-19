@@ -29,12 +29,12 @@ public class Recipe {
     private String translatedDescription;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "USER_ID")
+    @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID")
     private User user;
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "RECIPE_INGREDIENT",
             joinColumns = @JoinColumn(name = "RECIPE_ID"),
             inverseJoinColumns = @JoinColumn(name = "INGREDIENT_ID"))
-    private List<Ingredient> ingredients;
+    private Set<Ingredient> ingredients = new HashSet<>();
 }

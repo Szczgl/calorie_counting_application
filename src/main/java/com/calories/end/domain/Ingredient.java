@@ -3,7 +3,9 @@ package com.calories.end.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -35,7 +37,7 @@ public class Ingredient {
     private int cholesterol;
 
     @ManyToMany(mappedBy = "ingredients", fetch = FetchType.LAZY)
-    private List<Recipe> recipes;
+    private Set<Recipe> recipes = new HashSet<>();
 
     public Ingredient(Long id, String name, String quantity, int calories, int sugar, int salt, int cholesterol) {
         this.id = id;
