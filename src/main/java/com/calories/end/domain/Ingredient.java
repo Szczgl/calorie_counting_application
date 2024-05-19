@@ -3,18 +3,47 @@ package com.calories.end.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
-@Entity
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class Ingredient {
+import java.util.List;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "INGREDIENTS")
+public class Ingredient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "INGREDIENT_ID")
     private Long id;
+
+    @Column(name = "NAME")
     private String name;
-    private double calories;
-    private double sugar;
-    private double salt;
-    private double cholesterol;
+
+    @Column(name = "QUANTITY")
+    private String quantity;
+
+    @Column(name = "CALORIES")
+    private int calories;
+
+    @Column(name = "SUGAR")
+    private int sugar;
+
+    @Column(name = "SALT")
+    private int salt;
+
+    @Column(name = "CHOLESTEROL")
+    private int cholesterol;
+
+    @ManyToMany(mappedBy = "ingredients", fetch = FetchType.LAZY)
+    private List<Recipe> recipes;
+
+    public Ingredient(Long id, String name, String quantity, int calories, int sugar, int salt, int cholesterol) {
+        this.id = id;
+        this.name = name;
+        this.quantity = quantity;
+        this.calories = calories;
+        this.sugar = sugar;
+        this.salt = salt;
+        this.cholesterol = cholesterol;
+    }
 }

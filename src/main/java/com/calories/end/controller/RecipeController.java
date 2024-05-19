@@ -1,42 +1,46 @@
 package com.calories.end.controller;
 
 import com.calories.end.dto.RecipeDTO;
+import com.calories.end.exception.RecipeNotFoundException;
 import com.calories.end.services.RecipeService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/recipes")
+@RequestMapping("/v1/recipes")
+@RequiredArgsConstructor
 public class RecipeController {
 
-    @Autowired
-    private RecipeService recipeService;
+    private final RecipeService recipeService;
 
     @GetMapping
-    public List<RecipeDTO> getAllRecipes() {
-        return recipeService.getAllRecipes();
+    public ResponseEntity<List<RecipeDTO>> getAllRecipes() {
+        return ResponseEntity.ok(recipeService.getAllRecipes());
     }
 
     @GetMapping("/{id}")
-    public RecipeDTO getRecipeById(@PathVariable Long id) {
-        return recipeService.getRecipeById(id);
+    public ResponseEntity<RecipeDTO> getRecipeById(@PathVariable Long id) throws RecipeNotFoundException {
+        return ResponseEntity.ok(recipeService.getRecipeById(id));
     }
 
     @PostMapping
-    public RecipeDTO createRecipe(@RequestBody RecipeDTO recipeDTO) {
-        return recipeService.createRecipe(recipeDTO);
+    public ResponseEntity<RecipeDTO> createRecipe(@RequestBody RecipeDTO recipeDto) {
+        return ResponseEntity.ok(recipeService.saveRecipe(recipeDto));
     }
 
     @PutMapping("/{id}")
-    public RecipeDTO updateRecipe(@PathVariable Long id, @RequestBody RecipeDTO recipeDTO) {
-        return recipeService.updateRecipe(id, recipeDTO);
+    public ResponseEntity<RecipeDTO> updateRecipe(@RequestBody RecipeDTO recipeDto, @PathVariable Long id) throws RecipeNotFoundException {
+        return ResponseEntity.ok(recipeService.updateRecipe(recipeDto, id));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteRecipe(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteRecipe(@PathVariable Long id) {
         recipeService.deleteRecipe(id);
+        return ResponseEntity.ok().build();
     }
 }
 

@@ -1,42 +1,46 @@
 package com.calories.end.controller;
 
 import com.calories.end.dto.UserDTO;
+import com.calories.end.exception.UserNotFoundException;
 import com.calories.end.services.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/users")
+@RequestMapping("/v1/users")
+@RequiredArgsConstructor
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
     @GetMapping
-    public List<UserDTO> getAllUsers() {
-        return userService.getAllUsers();
+    public ResponseEntity<List<UserDTO>> getAllUsers() {
+        return ResponseEntity.ok(userService.getAllUsers());
     }
 
     @GetMapping("/{id}")
-    public UserDTO getUserById(@PathVariable Long id) {
-        return userService.getUserById(id);
+    public ResponseEntity<UserDTO> getUserById(@PathVariable Long id) throws UserNotFoundException {
+        return ResponseEntity.ok(userService.getUserById(id));
     }
 
     @PostMapping
-    public UserDTO createUser(@RequestBody UserDTO userDTO) {
-        return userService.createUser(userDTO);
+    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDto) {
+        return ResponseEntity.ok(userService.saveUser(userDto));
     }
 
     @PutMapping("/{id}")
-    public UserDTO updateUser(@PathVariable Long id, @RequestBody UserDTO userDTO) {
-        return userService.updateUser(id, userDTO);
+    public ResponseEntity<UserDTO> updateUser(@RequestBody UserDTO userDto, @PathVariable Long id) throws UserNotFoundException {
+        return ResponseEntity.ok(userService.updateUser(userDto, id));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
+        return ResponseEntity.ok().build();
     }
 }
 

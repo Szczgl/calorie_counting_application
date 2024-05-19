@@ -3,9 +3,11 @@ package com.calories.end.dto;
 import lombok.*;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class UserDTO {
-
     private Long id;
     private String username;
-    private double dailyCalorieRequirement;
+    private String email;
+    private int dailyCalorieIntake;
 }
