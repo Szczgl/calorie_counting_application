@@ -23,12 +23,12 @@ public class User {
     private String email;
 
     @Column(name = "DAILY_CALORIE_INTAKE")
-    private int dailyCalorieIntake;
+    private double dailyCalorieIntake;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Recipe> recipes;
 
-    public User(Long id, String username, String email, int dailyCalorieIntake) {
+    public User(Long id, String username, String email, double dailyCalorieIntake) {
         this.id = id;
         this.username = username;
         this.email = email;

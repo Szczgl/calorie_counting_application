@@ -8,9 +8,9 @@ import lombok.*;
 public class IngredientDTO {
     private Long id;
     private String name;
-    private String quantity;
-    private int calories;
-    private int sugar;
-    private int salt;
-    private int cholesterol;
+    private double quantity;
+    private double calories;
+    private double sugar;
+    private double salt;
+    private double cholesterol;
 }

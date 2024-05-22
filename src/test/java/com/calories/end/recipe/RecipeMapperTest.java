@@ -4,25 +4,17 @@ import com.calories.end.domain.Ingredient;
 import com.calories.end.domain.Recipe;
 import com.calories.end.domain.User;
 import com.calories.end.dto.RecipeDTO;
-import com.calories.end.mapper.IngredientMapper;
 import com.calories.end.mapper.RecipeMapper;
-import com.calories.end.repository.IngredientRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
-import java.util.Optional;
 import java.util.Set;
 import java.util.HashSet;
 
 class RecipeMapperTest {
-
-    @Mock
-    private IngredientRepository ingredientRepository;
 
     @InjectMocks
     private RecipeMapper recipeMapper;
@@ -35,9 +27,9 @@ class RecipeMapperTest {
     @Test
     void testMapToRecipeDto() {
         // GIVEN
-        User user = new User(1L, "JohnDoe", "john.doe@example.com", 2000);
+        User user = new User(1L, "Test", "test@test.com", 2000);
         Set<Ingredient> ingredients = new HashSet<>();
-        ingredients.add(new Ingredient(1L, "Sugar", "100g", 400, 100, 0, 0));
+        ingredients.add(new Ingredient(1L, "Sugar", 200, 400, 100, 0, 0));
 
         Recipe recipe = new Recipe(1L, "Pancakes", "Delicious pancakes", 600, "Translated description");
         recipe.setUser(user);

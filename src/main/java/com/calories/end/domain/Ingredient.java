@@ -22,24 +22,24 @@ public class Ingredient {
     private String name;
 
     @Column(name = "QUANTITY")
-    private String quantity;
+    private double quantity;
 
     @Column(name = "CALORIES")
-    private int calories;
+    private double calories;
 
     @Column(name = "SUGAR")
-    private int sugar;
+    private double sugar;
 
     @Column(name = "SALT")
-    private int salt;
+    private double salt;
 
     @Column(name = "CHOLESTEROL")
-    private int cholesterol;
+    private double cholesterol;
 
     @ManyToMany(mappedBy = "ingredients", fetch = FetchType.LAZY)
     private Set<Recipe> recipes = new HashSet<>();
 
-    public Ingredient(Long id, String name, String quantity, int calories, int sugar, int salt, int cholesterol) {
+    public Ingredient(Long id, String name, double quantity, double calories, double sugar, double salt, double cholesterol) {
         this.id = id;
         this.name = name;
         this.quantity = quantity;

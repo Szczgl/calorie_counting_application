@@ -6,12 +6,10 @@ import com.calories.end.exception.UserNotFoundException;
 import com.calories.end.mapper.UserMapper;
 import com.calories.end.repository.UserRepository;
 import com.calories.end.services.UserService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.*;

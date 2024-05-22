@@ -48,7 +48,7 @@ class IngredientControllerTestSuite {
     @Test
     void testGetIngredientById() throws Exception {
         // GIVEN
-        IngredientDTO ingredientDTO = new IngredientDTO(1L, "Test1", "100g", 100, 10, 1, 0);
+        IngredientDTO ingredientDTO = new IngredientDTO(1L, "Test1", 200, 100, 10, 1, 0);
         when(ingredientService.getIngredientById(1L)).thenReturn(ingredientDTO);
 
         // WHEN & THEN
@@ -56,7 +56,7 @@ class IngredientControllerTestSuite {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.name").value("Test1"))
-                .andExpect(jsonPath("$.quantity").value("100g"))
+                .andExpect(jsonPath("$.quantity").value(200))
                 .andExpect(jsonPath("$.calories").value(100))
                 .andExpect(jsonPath("$.sugar").value(10))
                 .andExpect(jsonPath("$.salt").value(1))
@@ -68,8 +68,8 @@ class IngredientControllerTestSuite {
     @Test
     void testCreateIngredient() throws Exception {
         // GIVEN
-        IngredientDTO ingredientDTO = new IngredientDTO(null, "Test1", "100g", 100, 10, 1, 0);
-        IngredientDTO savedIngredientDTO = new IngredientDTO(1L, "Test1", "100g", 100, 10, 1, 0);
+        IngredientDTO ingredientDTO = new IngredientDTO(null, "Test1", 200, 100, 10, 1, 0);
+        IngredientDTO savedIngredientDTO = new IngredientDTO(1L, "Test1", 200, 100, 10, 1, 0);
         when(ingredientService.saveIngredient(any(IngredientDTO.class))).thenReturn(savedIngredientDTO);
         Gson gson = new Gson();
         String json = gson.toJson(ingredientDTO);
@@ -80,7 +80,7 @@ class IngredientControllerTestSuite {
                         .content(json))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("Test1"))
-                .andExpect(jsonPath("$.quantity").value("100g"))
+                .andExpect(jsonPath("$.quantity").value(200))
                 .andExpect(jsonPath("$.calories").value(100))
                 .andExpect(jsonPath("$.sugar").value(10))
                 .andExpect(jsonPath("$.salt").value(1))
@@ -93,7 +93,7 @@ class IngredientControllerTestSuite {
     void testUpdateIngredient() throws Exception {
         // GIVEN
         Long id = 1L;
-        IngredientDTO ingredientDTO = new IngredientDTO(id, "UpdatedName", "200g", 200, 20, 2, 1);
+        IngredientDTO ingredientDTO = new IngredientDTO(id, "UpdatedName", 200, 200, 20, 2, 1);
         when(ingredientService.updateIngredient(any(IngredientDTO.class), anyLong())).thenReturn(ingredientDTO);
         Gson gson = new Gson();
         String json = gson.toJson(ingredientDTO);
@@ -105,7 +105,7 @@ class IngredientControllerTestSuite {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(id))
                 .andExpect(jsonPath("$.name").value("UpdatedName"))
-                .andExpect(jsonPath("$.quantity").value("200g"))
+                .andExpect(jsonPath("$.quantity").value(200))
                 .andExpect(jsonPath("$.calories").value(200))
                 .andExpect(jsonPath("$.sugar").value(20))
                 .andExpect(jsonPath("$.salt").value(2))

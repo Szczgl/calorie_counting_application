@@ -15,7 +15,7 @@ class IngredientMapperTest {
     @Test
     void testMapToIngredientDto() {
         // GIVEN
-        Ingredient ingredient = new Ingredient(1L, "Sugar", "100g", 400, 100, 0, 0);
+        Ingredient ingredient = new Ingredient(1L, "Sugar", 200, 400, 100, 0, 0);
 
         // WHEN
         IngredientDTO ingredientDto = ingredientMapper.mapToIngredientDto(ingredient);
@@ -23,7 +23,7 @@ class IngredientMapperTest {
         // THEN
         assertEquals(1L, ingredientDto.getId());
         assertEquals("Sugar", ingredientDto.getName());
-        assertEquals("100g", ingredientDto.getQuantity());
+        assertEquals(200, ingredientDto.getQuantity());
         assertEquals(400, ingredientDto.getCalories());
         assertEquals(100, ingredientDto.getSugar());
         assertEquals(0, ingredientDto.getSalt());
@@ -33,7 +33,7 @@ class IngredientMapperTest {
     @Test
     void testMapToIngredient() {
         // GIVEN
-        IngredientDTO ingredientDto = new IngredientDTO(1L, "Sugar", "100g", 400, 100, 0, 0);
+        IngredientDTO ingredientDto = new IngredientDTO(1L, "Sugar", 200, 400, 100, 0, 0);
 
         // WHEN
         Ingredient ingredient = ingredientMapper.mapToIngredient(ingredientDto);
@@ -41,7 +41,7 @@ class IngredientMapperTest {
         // THEN
         assertEquals(1L, ingredient.getId());
         assertEquals("Sugar", ingredient.getName());
-        assertEquals("100g", ingredient.getQuantity());
+        assertEquals(200, ingredient.getQuantity());
         assertEquals(400, ingredient.getCalories());
         assertEquals(100, ingredient.getSugar());
         assertEquals(0, ingredient.getSalt());
@@ -52,8 +52,8 @@ class IngredientMapperTest {
     void testMapToIngredientDtoList() {
         // GIVEN
         List<Ingredient> ingredients = Arrays.asList(
-                new Ingredient(1L, "Sugar", "100g", 400, 100, 0, 0),
-                new Ingredient(2L, "Salt", "50g", 0, 0, 50, 0)
+                new Ingredient(1L, "Sugar", 200, 400, 100, 0, 0),
+                new Ingredient(2L, "Salt", 50, 0, 0, 50, 0)
         );
 
         // WHEN
@@ -67,8 +67,8 @@ class IngredientMapperTest {
     void testMapToIngredientList() {
         // GIVEN
         List<IngredientDTO> ingredientDtos = Arrays.asList(
-                new IngredientDTO(1L, "Sugar", "100g", 400, 100, 0, 0),
-                new IngredientDTO(2L, "Salt", "50g", 0, 0, 50, 0)
+                new IngredientDTO(1L, "Sugar", 200, 400, 100, 0, 0),
+                new IngredientDTO(2L, "Salt", 50, 0, 0, 50, 0)
         );
 
         // WHEN

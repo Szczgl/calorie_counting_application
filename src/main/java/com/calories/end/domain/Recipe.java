@@ -23,7 +23,7 @@ public class Recipe {
     private String description;
 
     @Column(name = "TOTAL_CALORIES")
-    private int totalCalories;
+    private double totalCalories;
 
     @Column(name = "TRANSLATED_DESCRIPTION")
     private String translatedDescription;
@@ -38,7 +38,7 @@ public class Recipe {
             inverseJoinColumns = @JoinColumn(name = "INGREDIENT_ID"))
     private Set<Ingredient> ingredients = new HashSet<>();
 
-    public Recipe(Long id, String name, String description, int totalCalories, String translatedDescription) {
+    public Recipe(Long id, String name, String description, double totalCalories, String translatedDescription) {
         this.id = id;
         this.name = name;
         this.description = description;
