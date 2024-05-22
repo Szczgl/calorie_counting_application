@@ -15,4 +15,12 @@ public class RecipeDTO {
     private String translatedDescription;
     private Long userId;
     private Set<Long> ingredientIds;
+
+    public RecipeDTO(Long id, String name, String description, int totalCalories, String translatedDescription) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.totalCalories = totalCalories;
+        this.translatedDescription = translatedDescription;
+    }
 }

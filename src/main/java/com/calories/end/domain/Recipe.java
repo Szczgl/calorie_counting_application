@@ -37,4 +37,12 @@ public class Recipe {
             joinColumns = @JoinColumn(name = "RECIPE_ID"),
             inverseJoinColumns = @JoinColumn(name = "INGREDIENT_ID"))
     private Set<Ingredient> ingredients = new HashSet<>();
+
+    public Recipe(Long id, String name, String description, int totalCalories, String translatedDescription) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.totalCalories = totalCalories;
+        this.translatedDescription = translatedDescription;
+    }
 }
