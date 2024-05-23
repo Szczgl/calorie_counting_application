@@ -49,7 +49,7 @@ class UserControllerTestSuite {
     @Test
     void testGetUserById() throws Exception {
         // GIVEN
-        UserDTO userDTO = new UserDTO(1L, "TestUser", "test@example.com", 2000);
+        UserDTO userDTO = new UserDTO(1L, "TestUser", "test@example.com", 2000,1500);
         when(userService.getUserById(1L)).thenReturn(userDTO);
 
         // WHEN & THEN
@@ -58,7 +58,8 @@ class UserControllerTestSuite {
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.username").value("TestUser"))
                 .andExpect(jsonPath("$.email").value("test@example.com"))
-                .andExpect(jsonPath("$.dailyCalorieIntake").value(2000));
+                .andExpect(jsonPath("$.dailyCalorieIntake").value(2000))
+                .andExpect(jsonPath("$.dailyCalorieConsumption").value(1500));
 
         verify(userService, times(1)).getUserById(anyLong());
     }
@@ -66,8 +67,8 @@ class UserControllerTestSuite {
     @Test
     void testCreateUser() throws Exception {
         // GIVEN
-        UserDTO userDTO = new UserDTO(null, "TestUser", "test@example.com", 2000);
-        UserDTO savedUserDTO = new UserDTO(1L, "TestUser", "test@example.com", 2000);
+        UserDTO userDTO = new UserDTO(null, "TestUser", "test@example.com", 2000,1500);
+        UserDTO savedUserDTO = new UserDTO(1L, "TestUser", "test@example.com", 2000,1500);
         when(userService.saveUser(any(UserDTO.class))).thenReturn(savedUserDTO);
         Gson gson = new Gson();
         String json = gson.toJson(userDTO);
@@ -79,7 +80,8 @@ class UserControllerTestSuite {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.username").value("TestUser"))
                 .andExpect(jsonPath("$.email").value("test@example.com"))
-                .andExpect(jsonPath("$.dailyCalorieIntake").value(2000));
+                .andExpect(jsonPath("$.dailyCalorieIntake").value(2000))
+                .andExpect(jsonPath("$.dailyCalorieConsumption").value(1500));
 
         verify(userService, times(1)).saveUser(any(UserDTO.class));
     }
@@ -88,7 +90,7 @@ class UserControllerTestSuite {
     void testUpdateUser() throws Exception {
         // GIVEN
         Long id = 1L;
-        UserDTO userDTO = new UserDTO(id, "UpdatedUser", "updated@example.com", 2500);
+        UserDTO userDTO = new UserDTO(id, "UpdatedUser", "updated@example.com", 2500,1500);
         when(userService.updateUser(any(UserDTO.class), anyLong())).thenReturn(userDTO);
         Gson gson = new Gson();
         String json = gson.toJson(userDTO);
@@ -101,7 +103,8 @@ class UserControllerTestSuite {
                 .andExpect(jsonPath("$.id").value(id))
                 .andExpect(jsonPath("$.username").value("UpdatedUser"))
                 .andExpect(jsonPath("$.email").value("updated@example.com"))
-                .andExpect(jsonPath("$.dailyCalorieIntake").value(2500));
+                .andExpect(jsonPath("$.dailyCalorieIntake").value(2500))
+                .andExpect(jsonPath("$.dailyCalorieConsumption").value(1500));
 
         verify(userService, times(1)).updateUser(any(UserDTO.class), eq(id));
     }

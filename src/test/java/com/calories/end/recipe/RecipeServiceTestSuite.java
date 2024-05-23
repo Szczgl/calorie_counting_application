@@ -102,17 +102,20 @@ class RecipeServiceTestSuite {
     }
 
     @Test
-    void testUpdateRecipe() throws RecipeNotFoundException {
+    void testUpdateRecipe() throws RecipeNotFoundException,UserNotFoundException {
         // GIVEN
         Recipe recipe = new Recipe();
         RecipeDTO recipeDTO = new RecipeDTO();
+        User user = new User();
+        recipeDTO.setUserId(1L);
         when(recipeRepository.existsById(anyLong())).thenReturn(true);
         when(recipeMapper.mapToRecipe(any(RecipeDTO.class))).thenReturn(recipe);
         when(recipeRepository.save(any(Recipe.class))).thenReturn(recipe);
         when(recipeMapper.mapToRecipeDto(any(Recipe.class))).thenReturn(recipeDTO);
+        when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
 
         // WHEN
-        RecipeDTO result = recipeService.updateRecipe(recipeDTO, 1L);
+        RecipeDTO result = recipeService.replaceRecipe(recipeDTO, 1L);
 
         // THEN
         assertNotNull(result);

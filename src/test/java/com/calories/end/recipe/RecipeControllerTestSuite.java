@@ -54,7 +54,7 @@ class RecipeControllerTestSuite {
     @Test
     void testGetRecipeById() throws Exception {
         // GIVEN
-        RecipeDTO recipeDTO = new RecipeDTO(1L,"Test1","Test2", 100,"Test");
+        RecipeDTO recipeDTO = new RecipeDTO(1L,"Test1","Test2", 100);
         when(recipeService.getRecipeById(1L)).thenReturn(recipeDTO);
 
         // WHEN & THEN
@@ -63,8 +63,7 @@ class RecipeControllerTestSuite {
                 .andExpect(jsonPath("$.id").value(1))
                 .andExpect(jsonPath("$.name").value("Test1"))
                 .andExpect(jsonPath("$.description").value("Test2"))
-                .andExpect(jsonPath("$.totalCalories").value(100))
-                .andExpect(jsonPath("$.translatedDescription").value("Test"));
+                .andExpect(jsonPath("$.totalCalories").value(100));
 
         verify(recipeService, times(1)).getRecipeById(anyLong());
     }
@@ -72,8 +71,8 @@ class RecipeControllerTestSuite {
     @Test
     void testCreateRecipe() throws Exception {
         // GIVEN
-        RecipeDTO recipeDTO = new RecipeDTO(null,"Test1","Test2", 100,"Test", 1L, null);
-        Recipe recipe = new Recipe(1L,"Test1","Test2", 100,"Test", null, null);
+        RecipeDTO recipeDTO = new RecipeDTO(null,"Test1","Test2", 100, 1L, null);
+        Recipe recipe = new Recipe(1L,"Test1","Test2", 100,null, null);
         when(recipeMapper.mapToRecipe(any(RecipeDTO.class))).thenReturn(recipe);
         when(recipeService.saveRecipe(any(RecipeDTO.class))).thenReturn(recipe);
         when(recipeMapper.mapToRecipeDto(any(Recipe.class))).thenReturn(recipeDTO);
@@ -87,8 +86,7 @@ class RecipeControllerTestSuite {
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name").value("Test1"))
                 .andExpect(jsonPath("$.description").value("Test2"))
-                .andExpect(jsonPath("$.totalCalories").value(100))
-                .andExpect(jsonPath("$.translatedDescription").value("Test"));
+                .andExpect(jsonPath("$.totalCalories").value(100));
 
         verify(recipeService, times(1)).saveRecipe(any(RecipeDTO.class));
     }
@@ -97,10 +95,10 @@ class RecipeControllerTestSuite {
     void testUpdateRecipe() throws Exception {
         // GIVEN
         Long id = 1L;
-        RecipeDTO recipeDTO = new RecipeDTO(id, "UpdatedName", "UpdatedDescription", 200, "UpdatedTranslation", 1L, null);
-        Recipe recipe = new Recipe(id, "UpdatedName", "UpdatedDescription", 200, "UpdatedTranslation", null, null);
+        RecipeDTO recipeDTO = new RecipeDTO(id, "UpdatedName", "UpdatedDescription", 200, 1L, null);
+        Recipe recipe = new Recipe(id, "UpdatedName", "UpdatedDescription", 200, null, null);
         when(recipeMapper.mapToRecipe(any(RecipeDTO.class))).thenReturn(recipe);
-        when(recipeService.updateRecipe(any(RecipeDTO.class), anyLong())).thenReturn(recipeDTO);
+        when(recipeService.replaceRecipe(any(RecipeDTO.class), anyLong())).thenReturn(recipeDTO);
         when(recipeMapper.mapToRecipeDto(any(Recipe.class))).thenReturn(recipeDTO);
         Gson gson = new Gson();
         String json = gson.toJson(recipeDTO);
@@ -113,10 +111,9 @@ class RecipeControllerTestSuite {
                 .andExpect(jsonPath("$.id").value(id))
                 .andExpect(jsonPath("$.name").value("UpdatedName"))
                 .andExpect(jsonPath("$.description").value("UpdatedDescription"))
-                .andExpect(jsonPath("$.totalCalories").value(200))
-                .andExpect(jsonPath("$.translatedDescription").value("UpdatedTranslation"));
+                .andExpect(jsonPath("$.totalCalories").value(200));
 
-        verify(recipeService, times(1)).updateRecipe(any(RecipeDTO.class), eq(id));
+        verify(recipeService, times(1)).replaceRecipe(any(RecipeDTO.class), eq(id));
     }
 
     @Test
