@@ -16,7 +16,8 @@ public class UserMapper {
                 user.getId(),
                 user.getUsername(),
                 user.getEmail(),
-                user.getDailyCalorieIntake()
+                user.getDailyCalorieIntake(),
+                user.getDailyCalorieConsumption()
         );
     }
 
@@ -25,7 +26,8 @@ public class UserMapper {
                 userDto.getId(),
                 userDto.getUsername(),
                 userDto.getEmail(),
-                userDto.getDailyCalorieIntake()
+                userDto.getDailyCalorieIntake(),
+                userDto.getDailyCalorieConsumption()
         );
     }
 

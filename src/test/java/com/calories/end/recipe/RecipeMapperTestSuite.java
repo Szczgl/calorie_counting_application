@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.Set;
 import java.util.HashSet;
 
-class RecipeMapperTest {
+class RecipeMapperTestSuite {
 
     @InjectMocks
     private RecipeMapper recipeMapper;

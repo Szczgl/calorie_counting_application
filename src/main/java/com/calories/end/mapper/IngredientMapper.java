@@ -16,10 +16,7 @@ public class IngredientMapper {
                 ingredient.getId(),
                 ingredient.getName(),
                 ingredient.getQuantity(),
-                ingredient.getCalories(),
-                ingredient.getSugar(),
-                ingredient.getSalt(),
-                ingredient.getCholesterol()
+                ingredient.getCalories()
         );
     }
 
@@ -28,11 +25,7 @@ public class IngredientMapper {
                 ingredientDto.getId(),
                 ingredientDto.getName(),
                 ingredientDto.getQuantity(),
-                ingredientDto.getCalories(),
-                ingredientDto.getSugar(),
-                ingredientDto.getSalt(),
-                ingredientDto.getCholesterol()
-
+                ingredientDto.getCalories()
         );
     }
 

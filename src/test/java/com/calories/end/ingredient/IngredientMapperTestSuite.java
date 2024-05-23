@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 import java.util.Arrays;
 
-class IngredientMapperTest {
+class IngredientMapperTestSuite {
 
     private final IngredientMapper ingredientMapper = new IngredientMapper();
 

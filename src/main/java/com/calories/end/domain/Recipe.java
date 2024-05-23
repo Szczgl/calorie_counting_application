@@ -25,9 +25,6 @@ public class Recipe {
     @Column(name = "TOTAL_CALORIES")
     private double totalCalories;
 
-    @Column(name = "TRANSLATED_DESCRIPTION")
-    private String translatedDescription;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID")
     private User user;
@@ -38,11 +35,10 @@ public class Recipe {
             inverseJoinColumns = @JoinColumn(name = "INGREDIENT_ID"))
     private Set<Ingredient> ingredients = new HashSet<>();
 
-    public Recipe(Long id, String name, String description, double totalCalories, String translatedDescription) {
+    public Recipe(Long id, String name, String description, double totalCalories) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.totalCalories = totalCalories;
-        this.translatedDescription = translatedDescription;
     }
 }

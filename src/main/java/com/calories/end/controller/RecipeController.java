@@ -7,7 +7,6 @@ import com.calories.end.exception.UserNotFoundException;
 import com.calories.end.mapper.RecipeMapper;
 import com.calories.end.services.RecipeService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -41,8 +40,8 @@ public class RecipeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<RecipeDTO> updateRecipe(@RequestBody RecipeDTO recipeDto, @PathVariable Long id) throws RecipeNotFoundException {
-        return ResponseEntity.ok(recipeService.updateRecipe(recipeDto, id));
+    public ResponseEntity<RecipeDTO> updateRecipe(@RequestBody RecipeDTO recipeDto, @PathVariable Long id) throws RecipeNotFoundException, UserNotFoundException {
+        return ResponseEntity.ok(recipeService.replaceRecipe(recipeDto, id));
     }
 
     @DeleteMapping("/{id}")

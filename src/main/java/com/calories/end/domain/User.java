@@ -25,13 +25,20 @@ public class User {
     @Column(name = "DAILY_CALORIE_INTAKE")
     private double dailyCalorieIntake;
 
+    @Column(name = "DAILY_CALORIE_CONSUMPTION")
+    private double dailyCalorieConsumption;
+
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Recipe> recipes;
 
-    public User(Long id, String username, String email, double dailyCalorieIntake) {
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Activity> activity;
+
+    public User(Long id, String username, String email, double dailyCalorieIntake, double dailyCalorieConsumption) {
         this.id = id;
         this.username = username;
         this.email = email;
         this.dailyCalorieIntake = dailyCalorieIntake;
+        this.dailyCalorieConsumption = dailyCalorieConsumption;
     }
 }

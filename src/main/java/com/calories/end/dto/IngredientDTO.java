@@ -10,7 +10,4 @@ public class IngredientDTO {
     private String name;
     private double quantity;
     private double calories;
-    private double sugar;
-    private double salt;
-    private double cholesterol;
 }

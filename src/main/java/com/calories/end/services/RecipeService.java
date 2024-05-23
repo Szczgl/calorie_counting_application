@@ -1,6 +1,5 @@
 package com.calories.end.services;
 
-import com.calories.end.domain.Ingredient;
 import com.calories.end.domain.Recipe;
 import com.calories.end.domain.User;
 import com.calories.end.dto.RecipeDTO;
@@ -9,13 +8,9 @@ import com.calories.end.exception.UserNotFoundException;
 import com.calories.end.mapper.RecipeMapper;
 import com.calories.end.repository.RecipeRepository;
 import com.calories.end.repository.UserRepository;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,8 +18,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class RecipeService {
 
-    @PersistenceContext
-    private EntityManager entityManager;
 
     private final RecipeRepository recipeRepository;
     private final RecipeMapper recipeMapper;
@@ -54,13 +47,15 @@ public class RecipeService {
         recipeRepository.deleteById(id);
     }
 
-    public RecipeDTO updateRecipe(RecipeDTO recipeDto, Long id) throws RecipeNotFoundException {
+    public RecipeDTO replaceRecipe(RecipeDTO recipeDto, Long id) throws RecipeNotFoundException, UserNotFoundException {
         if (!recipeRepository.existsById(id)) {
             throw new RecipeNotFoundException("Recipe not found with id: " + id);
         }
-        recipeDto.setId(id);
-        Recipe recipe = recipeMapper.mapToRecipe(recipeDto);
-        return recipeMapper.mapToRecipeDto(recipeRepository.save(recipe));
+        deleteRecipe(id);
+        recipeDto.setId(null);
+
+        Recipe newRecipe = saveRecipe(recipeDto);
+        return recipeMapper.mapToRecipeDto(newRecipe);
     }
 }
 

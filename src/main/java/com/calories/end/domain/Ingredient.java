@@ -27,25 +27,13 @@ public class Ingredient {
     @Column(name = "CALORIES")
     private double calories;
 
-    @Column(name = "SUGAR")
-    private double sugar;
-
-    @Column(name = "SALT")
-    private double salt;
-
-    @Column(name = "CHOLESTEROL")
-    private double cholesterol;
-
     @ManyToMany(mappedBy = "ingredients", fetch = FetchType.LAZY)
     private Set<Recipe> recipes = new HashSet<>();
 
-    public Ingredient(Long id, String name, double quantity, double calories, double sugar, double salt, double cholesterol) {
+    public Ingredient(Long id, String name, double quantity, double calories) {
         this.id = id;
         this.name = name;
         this.quantity = quantity;
         this.calories = calories;
-        this.sugar = sugar;
-        this.salt = salt;
-        this.cholesterol = cholesterol;
     }
 }

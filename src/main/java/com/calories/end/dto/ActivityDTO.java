@@ -2,23 +2,20 @@ package com.calories.end.dto;
 
 import lombok.*;
 
-import java.util.*;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class RecipeDTO {
+public class ActivityDTO {
     private Long id;
     private String name;
     private String description;
-    private double totalCalories;
+    private double consumedCalories;
     private Long userId;
-    private Set<Long> ingredientIds;
 
-    public RecipeDTO(Long id, String name, String description, double totalCalories) {
+    public ActivityDTO(Long id, String name, String description, double consumedCalories) {
         this.id = id;
         this.name = name;
         this.description = description;
-        this.totalCalories = totalCalories;
+        this.consumedCalories = consumedCalories;
     }
 }

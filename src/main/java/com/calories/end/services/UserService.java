@@ -6,7 +6,6 @@ import com.calories.end.exception.UserNotFoundException;
 import com.calories.end.mapper.UserMapper;
 import com.calories.end.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,7 +35,7 @@ public class UserService {
         return userMapper.mapToUserDto(userRepository.save(user));
     }
 
-    public void deleteUser(Long id) {
+    public void deleteUser(Long id)  {
         userRepository.deleteById(id);
     }
 

@@ -15,8 +15,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class RecipeMapper {
 
-    private final IngredientMapper ingredientMapper;
-
     @Autowired
     private IngredientRepository ingredientRepository;
 
@@ -26,7 +24,6 @@ public class RecipeMapper {
         recipeDto.setName(recipe.getName());
         recipeDto.setDescription(recipe.getDescription());
         recipeDto.setTotalCalories(recipe.getTotalCalories());
-        recipeDto.setTranslatedDescription(recipe.getTranslatedDescription());
         recipeDto.setUserId(recipe.getUser().getId());
         recipeDto.setIngredientIds(recipe.getIngredients().stream()
                 .map(Ingredient::getId)
@@ -41,7 +38,6 @@ public class RecipeMapper {
         recipe.setName(recipeDto.getName());
         recipe.setDescription(recipeDto.getDescription());
         recipe.setTotalCalories(recipeDto.getTotalCalories());
-        recipe.setTranslatedDescription(recipeDto.getTranslatedDescription());
 
         Set<Ingredient> ingredients = recipeDto.getIngredientIds().stream()
                 .map(id -> ingredientRepository.findById(id).orElseThrow(() -> new RuntimeException("Ingredient not found")))

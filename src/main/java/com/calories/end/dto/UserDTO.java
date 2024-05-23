@@ -10,5 +10,6 @@ public class UserDTO {
     private String username;
     private String email;
     private double dailyCalorieIntake;
+    private double dailyCalorieConsumption;
 
 }
