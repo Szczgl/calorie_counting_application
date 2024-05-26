@@ -1,8 +1,8 @@
 package com.calories.end.scheduler;
 import com.calories.end.dto.UserDTO;
+import com.calories.end.services.EmailService;
 import com.calories.end.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -10,13 +10,18 @@ import org.springframework.stereotype.Component;
 @Component
 public class EmailScheduler {
 
-    @Autowired
-    private JavaMailSender javaMailSender;
+    private final JavaMailSender javaMailSender;
+    private final UserService userService;
+    private final EmailService emailService;
 
     @Autowired
-    private UserService userService;
+    public EmailScheduler(JavaMailSender javaMailSender, UserService userService) {
+        this.javaMailSender = javaMailSender;
+        this.userService = userService;
+        this.emailService = EmailService.getInstance(javaMailSender);
+    }
 
-    @Scheduled(cron = "0 30 14 * * ?")
+    @Scheduled(cron = "0 0 22 * * ?")
     public void sendDailyCalorieReport() {
         for (UserDTO userDTO : userService.getAllUsers()) {
             double calorieIntake = userDTO.getDailyCalorieIntake();
@@ -25,15 +30,7 @@ public class EmailScheduler {
 
             String message = String.format("Hi %s, your daily calorie deficit/intake is: %.2f", userDTO.getUsername(), calorieDeficit);
 
-            sendEmail(userDTO.getEmail(), "Daily Calorie Report", message);
+            emailService.sendCalorieReport(userDTO.getEmail(), "Daily Calorie Report", message);
         }
-    }
-
-    private void sendEmail(String to, String subject, String text) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(to);
-        message.setSubject(subject);
-        message.setText(text);
-        javaMailSender.send(message);
     }
 }
