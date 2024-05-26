@@ -1,8 +1,10 @@
 package com.calories.end.domain;
 
+import com.calories.end.domain.observer.Observer;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -34,6 +36,8 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Activity> activity;
 
+    private transient List<Observer> observers = new ArrayList<>();
+
     public User(Long id, String username, String email, double dailyCalorieIntake, double dailyCalorieConsumption) {
         this.id = id;
         this.username = username;
@@ -41,4 +45,42 @@ public class User {
         this.dailyCalorieIntake = dailyCalorieIntake;
         this.dailyCalorieConsumption = dailyCalorieConsumption;
     }
+
+    public void addObserver(Observer observer) {
+        observers.add(observer);
+    }
+
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    private void notifyObservers() {
+        for (Observer observer : observers) {
+            observer.update(this);
+        }
+    }
+
+    public void addRecipe(Recipe recipe) {
+        recipes.add(recipe);
+        notifyObservers();
+    }
+
+    public void removeRecipe(Recipe recipe) {
+        recipes.remove(recipe);
+        notifyObservers();
+    }
+
+    public void addActivity(Activity activity) {
+        this.activity.add(activity);
+        notifyObservers();
+    }
+
+    public void removeActivity(Activity activity) {
+        this.activity.remove(activity);
+        notifyObservers();
+    }
+
+
+
+
 }

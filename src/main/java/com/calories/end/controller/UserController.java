@@ -1,5 +1,7 @@
 package com.calories.end.controller;
 
+import com.calories.end.domain.Activity;
+import com.calories.end.domain.Recipe;
 import com.calories.end.dto.UserDTO;
 import com.calories.end.exception.UserNotFoundException;
 import com.calories.end.services.UserService;
@@ -40,6 +42,18 @@ public class UserController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{userId}/recipes")
+    public ResponseEntity<Void> addRecipeToUser(@PathVariable Long userId, @RequestBody Recipe recipe) throws UserNotFoundException {
+        userService.addRecipeToUser(userId, recipe);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{userId}/activities")
+    public ResponseEntity<Void> addActivityToUser(@PathVariable Long userId, @RequestBody Activity activity) throws UserNotFoundException {
+        userService.addActivityToUser(userId, activity);
         return ResponseEntity.ok().build();
     }
 }
