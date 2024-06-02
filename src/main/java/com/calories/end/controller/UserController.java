@@ -2,8 +2,10 @@ package com.calories.end.controller;
 
 import com.calories.end.domain.Activity;
 import com.calories.end.domain.Recipe;
+import com.calories.end.dto.ReportDTO;
 import com.calories.end.dto.UserDTO;
 import com.calories.end.exception.UserNotFoundException;
+import com.calories.end.services.ReportService;
 import com.calories.end.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,7 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
+    private final ReportService reportService;
 
     @GetMapping
     public ResponseEntity<List<UserDTO>> getAllUsers() {
@@ -54,6 +57,12 @@ public class UserController {
     public ResponseEntity<Void> addActivityToUser(@PathVariable Long userId, @RequestBody Activity activity) throws UserNotFoundException {
         userService.addActivityToUser(userId, activity);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{id}/daily-report")
+    public ResponseEntity<ReportDTO> getDailyReport(@PathVariable Long id) throws UserNotFoundException {
+        ReportDTO report = reportService.generateDailyReport(id);
+        return ResponseEntity.ok(report);
     }
 }
 
