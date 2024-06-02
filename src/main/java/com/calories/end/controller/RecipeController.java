@@ -1,6 +1,7 @@
 package com.calories.end.controller;
 
 import com.calories.end.dto.RecipeDTO;
+import com.calories.end.exception.IngredientNotFoundException;
 import com.calories.end.exception.RecipeNotFoundException;
 import com.calories.end.exception.UserNotFoundException;
 import com.calories.end.mapper.RecipeMapper;
@@ -19,7 +20,6 @@ import java.util.List;
 public class RecipeController {
 
     private final RecipeService recipeService;
-    private final RecipeMapper recipeMapper;
 
     @GetMapping
     public ResponseEntity<List<RecipeDTO>> getAllRecipes() {
@@ -32,13 +32,13 @@ public class RecipeController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<RecipeDTO> createRecipe(@RequestBody RecipeDTO recipeDto) throws UserNotFoundException {
+    public ResponseEntity<RecipeDTO> createRecipe(@RequestBody RecipeDTO recipeDto) throws UserNotFoundException, IngredientNotFoundException {
         RecipeDTO savedRecipeDto = recipeService.saveRecipe(recipeDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedRecipeDto);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<RecipeDTO> updateRecipe(@RequestBody RecipeDTO recipeDto, @PathVariable Long id) throws RecipeNotFoundException, UserNotFoundException {
+    public ResponseEntity<RecipeDTO> updateRecipe(@RequestBody RecipeDTO recipeDto, @PathVariable Long id) throws RecipeNotFoundException, UserNotFoundException, IngredientNotFoundException {
         return ResponseEntity.ok(recipeService.replaceRecipe(recipeDto, id));
     }
 

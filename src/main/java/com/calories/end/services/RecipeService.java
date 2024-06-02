@@ -5,17 +5,20 @@ import com.calories.end.domain.Recipe;
 import com.calories.end.domain.User;
 import com.calories.end.dto.IngredientDTO;
 import com.calories.end.dto.RecipeDTO;
+import com.calories.end.exception.IngredientNotFoundException;
 import com.calories.end.exception.RecipeNotFoundException;
 import com.calories.end.exception.UserNotFoundException;
 import com.calories.end.mapper.RecipeMapper;
 import com.calories.end.repository.IngredientRepository;
 import com.calories.end.repository.RecipeRepository;
 import com.calories.end.repository.UserRepository;
+import com.calories.end.services.edamam.EdamamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -27,6 +30,7 @@ public class RecipeService {
     private final RecipeMapper recipeMapper;
     private final IngredientRepository ingredientRepository;
     private final UserRepository userRepository;
+    private final EdamamService edamamService;
 
     public List<RecipeDTO> getAllRecipes() {
         return recipeRepository.findAll().stream()
@@ -41,19 +45,25 @@ public class RecipeService {
     }
 
     @Transactional
-    public RecipeDTO saveRecipe(RecipeDTO recipeDto) throws UserNotFoundException {
+    public RecipeDTO saveRecipe(RecipeDTO recipeDto) throws UserNotFoundException, IngredientNotFoundException {
         Recipe recipe = recipeMapper.mapToRecipe(recipeDto);
         User user = userRepository.findById(recipeDto.getUserId())
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + recipeDto.getUserId()));
         recipe.setUser(user);
 
         Set<Ingredient> ingredients = recipeDto.getIngredients().stream()
-                .map(this::findOrCreateIngredient)
+                .map(ingredientDto -> {
+                    try {
+                        return findOrCreateIngredient(ingredientDto);
+                    } catch (IngredientNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
                 .collect(Collectors.toSet());
         recipe.setIngredients(ingredients);
 
         recipe.setTotalCalories(ingredients.stream()
-                .mapToDouble(ingredient -> ingredient.getCalories() * ingredient.getQuantity() / 100)
+                .mapToDouble(Ingredient::getCalories)
                 .sum());
 
         Recipe savedRecipe = recipeRepository.save(recipe);
@@ -61,7 +71,7 @@ public class RecipeService {
     }
 
     @Transactional
-    public RecipeDTO replaceRecipe(RecipeDTO recipeDto, Long id) throws RecipeNotFoundException, UserNotFoundException {
+    public RecipeDTO replaceRecipe(RecipeDTO recipeDto, Long id) throws RecipeNotFoundException, UserNotFoundException, IngredientNotFoundException {
         Recipe existingRecipe = recipeRepository.findById(id)
                 .orElseThrow(() -> new RecipeNotFoundException("Recipe not found with id: " + id));
 
@@ -73,12 +83,18 @@ public class RecipeService {
         existingRecipe.setUser(user);
 
         Set<Ingredient> ingredients = recipeDto.getIngredients().stream()
-                .map(this::findOrCreateIngredient)
+                .map(ingredientDto -> {
+                    try {
+                        return findOrCreateIngredient(ingredientDto);
+                    } catch (IngredientNotFoundException e) {
+                        throw new RuntimeException(e);
+                    }
+                })
                 .collect(Collectors.toSet());
         existingRecipe.setIngredients(ingredients);
 
         existingRecipe.setTotalCalories(ingredients.stream()
-                .mapToDouble(ingredient -> ingredient.getCalories() * ingredient.getQuantity() / 100)
+                .mapToDouble(Ingredient::getCalories)
                 .sum());
 
         Recipe savedRecipe = recipeRepository.save(existingRecipe);
@@ -89,15 +105,19 @@ public class RecipeService {
         recipeRepository.deleteById(id);
     }
 
-    private Ingredient findOrCreateIngredient(IngredientDTO ingredientDto) {
-        return ingredientRepository.findByName(ingredientDto.getName())
-                .orElseGet(() -> ingredientRepository.save(new Ingredient(
-                        null,
-                        ingredientDto.getName(),
-                        ingredientDto.getQuantity(),
-                        ingredientDto.getCalories()
-                )));
+    private Ingredient findOrCreateIngredient(IngredientDTO ingredientDto) throws IngredientNotFoundException {
+        Ingredient existingIngredient = ingredientRepository.findByName(ingredientDto.getName()).orElse(null);
+        if (existingIngredient != null) {
+            existingIngredient.setQuantity(existingIngredient.getQuantity() + ingredientDto.getQuantity());
+            return existingIngredient;
+        } else {
+            IngredientDTO fetchedIngredient = edamamService.searchIngredientByName(ingredientDto.getName());
+            return ingredientRepository.save(new Ingredient(
+                    null,
+                    fetchedIngredient.getName(),
+                    ingredientDto.getQuantity(),
+                    fetchedIngredient.getCalories() / fetchedIngredient.getQuantity() * ingredientDto.getQuantity()
+            ));
+        }
     }
 }
-
-
