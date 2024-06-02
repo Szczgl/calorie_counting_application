@@ -1,11 +1,14 @@
 package com.calories.end.recipe;
 
+import com.calories.end.domain.Ingredient;
 import com.calories.end.domain.Recipe;
 import com.calories.end.domain.User;
+import com.calories.end.dto.IngredientDTO;
 import com.calories.end.dto.RecipeDTO;
 import com.calories.end.exception.RecipeNotFoundException;
 import com.calories.end.exception.UserNotFoundException;
 import com.calories.end.mapper.RecipeMapper;
+import com.calories.end.repository.IngredientRepository;
 import com.calories.end.repository.RecipeRepository;
 import com.calories.end.repository.UserRepository;
 import com.calories.end.services.RecipeService;
@@ -28,6 +31,9 @@ class RecipeServiceTestSuite {
 
     @Mock
     private RecipeMapper recipeMapper;
+
+    @Mock
+    private IngredientRepository ingredientRepository;
 
     @Mock
     private UserRepository userRepository;
@@ -79,12 +85,18 @@ class RecipeServiceTestSuite {
         RecipeDTO recipeDTO = new RecipeDTO();
         User user = new User();
         recipeDTO.setUserId(1L);
+        IngredientDTO ingredientDTO = new IngredientDTO(null, "Test", 200, 220);
+        recipeDTO.setIngredients(Collections.singletonList(ingredientDTO));
+        Ingredient ingredient = new Ingredient(null, "Test", 200, 220);
+
         when(recipeMapper.mapToRecipe(any(RecipeDTO.class))).thenReturn(recipe);
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
         when(recipeRepository.save(any(Recipe.class))).thenReturn(recipe);
+        when(ingredientRepository.findByName(anyString())).thenReturn(Optional.of(ingredient));
+        when(recipeMapper.mapToRecipeDto(any(Recipe.class))).thenReturn(recipeDTO); // Add this line
 
         // WHEN
-        Recipe result = recipeService.saveRecipe(recipeDTO);
+        RecipeDTO result = recipeService.saveRecipe(recipeDTO);
 
         // THEN
         assertNotNull(result);
@@ -102,24 +114,29 @@ class RecipeServiceTestSuite {
     }
 
     @Test
-    void testUpdateRecipe() throws RecipeNotFoundException,UserNotFoundException {
+    void testUpdateRecipe() throws RecipeNotFoundException, UserNotFoundException {
         // GIVEN
         Recipe recipe = new Recipe();
         RecipeDTO recipeDTO = new RecipeDTO();
         User user = new User();
         recipeDTO.setUserId(1L);
-        when(recipeRepository.existsById(anyLong())).thenReturn(true);
+        IngredientDTO ingredientDTO = new IngredientDTO(null, "Test", 200, 220);
+        recipeDTO.setIngredients(Collections.singletonList(ingredientDTO));
+        Ingredient ingredient = new Ingredient(null, "Test", 200, 220);
+
+        when(recipeRepository.findById(anyLong())).thenReturn(Optional.of(recipe));
         when(recipeMapper.mapToRecipe(any(RecipeDTO.class))).thenReturn(recipe);
         when(recipeRepository.save(any(Recipe.class))).thenReturn(recipe);
         when(recipeMapper.mapToRecipeDto(any(Recipe.class))).thenReturn(recipeDTO);
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
+        when(ingredientRepository.findByName(anyString())).thenReturn(Optional.of(ingredient));
 
         // WHEN
         RecipeDTO result = recipeService.replaceRecipe(recipeDTO, 1L);
 
         // THEN
         assertNotNull(result);
-        verify(recipeRepository, times(1)).existsById(anyLong());
+        verify(recipeRepository, times(1)).findById(anyLong());
         verify(recipeRepository, times(1)).save(any(Recipe.class));
     }
 

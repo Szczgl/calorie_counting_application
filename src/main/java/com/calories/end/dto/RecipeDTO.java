@@ -13,12 +13,5 @@ public class RecipeDTO {
     private String description;
     private double totalCalories;
     private Long userId;
-    private Set<Long> ingredientIds;
-
-    public RecipeDTO(Long id, String name, String description, double totalCalories) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.totalCalories = totalCalories;
-    }
+    private List<IngredientDTO> ingredients;
 }

@@ -1,6 +1,5 @@
 package com.calories.end.controller;
 
-import com.calories.end.domain.Recipe;
 import com.calories.end.dto.RecipeDTO;
 import com.calories.end.exception.RecipeNotFoundException;
 import com.calories.end.exception.UserNotFoundException;
@@ -22,7 +21,6 @@ public class RecipeController {
     private final RecipeService recipeService;
     private final RecipeMapper recipeMapper;
 
-
     @GetMapping
     public ResponseEntity<List<RecipeDTO>> getAllRecipes() {
         return ResponseEntity.ok(recipeService.getAllRecipes());
@@ -35,8 +33,8 @@ public class RecipeController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RecipeDTO> createRecipe(@RequestBody RecipeDTO recipeDto) throws UserNotFoundException {
-        Recipe savedRecipe = recipeService.saveRecipe(recipeDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(recipeMapper.mapToRecipeDto(savedRecipe));
+        RecipeDTO savedRecipeDto = recipeService.saveRecipe(recipeDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedRecipeDto);
     }
 
     @PutMapping("/{id}")

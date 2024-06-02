@@ -1,7 +1,7 @@
 
 package com.calories.end.recipe;
 
-import com.calories.end.domain.Recipe;
+import com.calories.end.dto.IngredientDTO;
 import com.calories.end.dto.RecipeDTO;
 import com.calories.end.mapper.RecipeMapper;
 import com.calories.end.services.RecipeService;
@@ -54,7 +54,7 @@ class RecipeControllerTestSuite {
     @Test
     void testGetRecipeById() throws Exception {
         // GIVEN
-        RecipeDTO recipeDTO = new RecipeDTO(1L,"Test1","Test2", 100);
+        RecipeDTO recipeDTO = new RecipeDTO(1L, "Test1", "Test2", 100, 1L, Collections.emptyList());
         when(recipeService.getRecipeById(1L)).thenReturn(recipeDTO);
 
         // WHEN & THEN
@@ -71,11 +71,11 @@ class RecipeControllerTestSuite {
     @Test
     void testCreateRecipe() throws Exception {
         // GIVEN
-        RecipeDTO recipeDTO = new RecipeDTO(null,"Test1","Test2", 100, 1L, null);
-        Recipe recipe = new Recipe(1L,"Test1","Test2", 100,null, null);
-        when(recipeMapper.mapToRecipe(any(RecipeDTO.class))).thenReturn(recipe);
-        when(recipeService.saveRecipe(any(RecipeDTO.class))).thenReturn(recipe);
-        when(recipeMapper.mapToRecipeDto(any(Recipe.class))).thenReturn(recipeDTO);
+        IngredientDTO ingredientDTO = new IngredientDTO(null, "Test3", 200, 220);
+        List<IngredientDTO> ingredients = Collections.singletonList(ingredientDTO);
+        RecipeDTO recipeDTO = new RecipeDTO(null, "Test1", "Test2", 100, 1L, ingredients);
+
+        when(recipeService.saveRecipe(any(RecipeDTO.class))).thenReturn(recipeDTO);
         Gson gson = new Gson();
         String json = gson.toJson(recipeDTO);
 
@@ -95,11 +95,11 @@ class RecipeControllerTestSuite {
     void testUpdateRecipe() throws Exception {
         // GIVEN
         Long id = 1L;
-        RecipeDTO recipeDTO = new RecipeDTO(id, "UpdatedName", "UpdatedDescription", 200, 1L, null);
-        Recipe recipe = new Recipe(id, "UpdatedName", "UpdatedDescription", 200, null, null);
-        when(recipeMapper.mapToRecipe(any(RecipeDTO.class))).thenReturn(recipe);
+        IngredientDTO ingredientDTO = new IngredientDTO(null, "Test3", 200, 220);
+        List<IngredientDTO> ingredients = Collections.singletonList(ingredientDTO);
+        RecipeDTO recipeDTO = new RecipeDTO(id, "UpdatedName", "UpdatedDescription", 200, 1L, ingredients);
+
         when(recipeService.replaceRecipe(any(RecipeDTO.class), anyLong())).thenReturn(recipeDTO);
-        when(recipeMapper.mapToRecipeDto(any(Recipe.class))).thenReturn(recipeDTO);
         Gson gson = new Gson();
         String json = gson.toJson(recipeDTO);
 

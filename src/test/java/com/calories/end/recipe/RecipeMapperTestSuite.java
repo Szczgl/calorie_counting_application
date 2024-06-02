@@ -27,11 +27,11 @@ class RecipeMapperTestSuite {
     @Test
     void testMapToRecipeDto() {
         // GIVEN
-        User user = new User(1L, "Test", "test@test.com", 2000,1500);
+        User user = new User(1L, "Test", "test@test.com", 2000, 1500);
         Set<Ingredient> ingredients = new HashSet<>();
         ingredients.add(new Ingredient(1L, "Sugar", 200, 400));
 
-        Recipe recipe = new Recipe(1L, "Pancakes", "Delicious pancakes", 600);
+        Recipe recipe = new Recipe(1L, "Test2", "test3", 600);
         recipe.setUser(user);
         recipe.setIngredients(ingredients);
 
@@ -40,11 +40,11 @@ class RecipeMapperTestSuite {
 
         // THEN
         assertEquals(1L, recipeDto.getId());
-        assertEquals("Pancakes", recipeDto.getName());
-        assertEquals("Delicious pancakes", recipeDto.getDescription());
+        assertEquals("Test2", recipeDto.getName());
+        assertEquals("test3", recipeDto.getDescription());
         assertEquals(600, recipeDto.getTotalCalories());
         assertEquals(1L, recipeDto.getUserId());
-        assertEquals(1, recipeDto.getIngredientIds().size());
-        assertTrue(recipeDto.getIngredientIds().contains(1L));
+        assertEquals(1, recipeDto.getIngredients().size());
+        assertTrue(recipeDto.getIngredients().stream().anyMatch(ingredient -> ingredient.getName().equals("Sugar")));
     }
 }
