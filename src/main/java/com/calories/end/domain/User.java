@@ -80,7 +80,19 @@ public class User {
         notifyObservers();
     }
 
+    public double calculateDailyCalorieConsumption() {
+        double totalRecipeCalories = recipes.stream()
+                .mapToDouble(Recipe::getTotalCalories)
+                .sum();
+        double totalActivityCalories = activity.stream()
+                .mapToDouble(Activity::getConsumedCalories)
+                .sum();
+        return totalRecipeCalories - totalActivityCalories;
+    }
 
-
-
+    @PostLoad
+    public void updateDailyCalorieConsumption() {
+        this.dailyCalorieConsumption = calculateDailyCalorieConsumption();
+        notifyObservers();
+    }
 }
