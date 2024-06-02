@@ -1,9 +1,13 @@
 package com.calories.end.user;
 
+import com.calories.end.dto.ReportDTO;
 import com.calories.end.dto.UserDTO;
+import com.calories.end.exception.UserNotFoundException;
+import com.calories.end.services.ReportService;
 import com.calories.end.services.UserService;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -11,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDate;
 import java.util.*;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -28,6 +33,9 @@ class UserControllerTestSuite {
 
     @MockBean
     private UserService userService;
+
+    @MockBean
+    private ReportService reportService;
 
     @Test
     void testGetAllUsers() throws Exception {
