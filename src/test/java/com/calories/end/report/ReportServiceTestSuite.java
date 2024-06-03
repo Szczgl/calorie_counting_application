@@ -33,7 +33,7 @@ class ReportServiceTestSuite {
 
     @Test
     void generateDailyReport_UserFound_ReturnsReportDTO() throws UserNotFoundException {
-        // Given
+        // GIVEN
         User user = new User();
         user.setId(1L);
         user.setUsername("Tom");
@@ -45,13 +45,12 @@ class ReportServiceTestSuite {
         recipe.setName("Test");
 
         user.setRecipes(Collections.singletonList(recipe));
-
         when(userRepository.findById(anyLong())).thenReturn(Optional.of(user));
 
-        // When
+        // WHEN
         ReportDTO reportDTO = reportService.generateDailyReport(1L);
 
-        // Then
+        // THEN
         assertNotNull(reportDTO);
         assertEquals("Tom", reportDTO.getUsername());
         assertEquals(2100, reportDTO.getDailyCalorieIntake());
@@ -63,10 +62,10 @@ class ReportServiceTestSuite {
 
     @Test
     void generateDailyReport_UserNotFound_ThrowsUserNotFoundException() {
-        // Given
+        // GIVEN
         when(userRepository.findById(anyLong())).thenReturn(Optional.empty());
 
-        // When & Then
+        // WHEN & THEN
         assertThrows(UserNotFoundException.class, () -> reportService.generateDailyReport(1L));
     }
 }

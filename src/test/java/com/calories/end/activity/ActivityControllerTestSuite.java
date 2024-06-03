@@ -1,21 +1,20 @@
 package com.calories.end.activity;
 
-import com.calories.end.controller.ActivityController;
 import com.calories.end.domain.Activity;
 import com.calories.end.dto.ActivityDTO;
 import com.calories.end.mapper.ActivityMapper;
 import com.calories.end.services.ActivityService;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
 import java.util.List;
+
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;

@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-
 @Component
 @RequiredArgsConstructor
 public class RecipeMapper {
@@ -42,7 +41,6 @@ public class RecipeMapper {
                 .map(this::findOrCreateIngredient)
                 .collect(Collectors.toSet());
         recipe.setIngredients(ingredients);
-
         return recipe;
     }
 

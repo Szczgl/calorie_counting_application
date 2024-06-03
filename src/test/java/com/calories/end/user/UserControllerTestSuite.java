@@ -1,13 +1,9 @@
 package com.calories.end.user;
 
-import com.calories.end.dto.ReportDTO;
 import com.calories.end.dto.UserDTO;
-import com.calories.end.exception.UserNotFoundException;
-import com.calories.end.services.ReportService;
 import com.calories.end.services.UserService;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -15,7 +11,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.time.LocalDate;
 import java.util.*;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -33,9 +28,6 @@ class UserControllerTestSuite {
 
     @MockBean
     private UserService userService;
-
-    @MockBean
-    private ReportService reportService;
 
     @Test
     void testGetAllUsers() throws Exception {
@@ -57,15 +49,15 @@ class UserControllerTestSuite {
     @Test
     void testGetUserById() throws Exception {
         // GIVEN
-        UserDTO userDTO = new UserDTO(1L, "TestUser", "test@example.com", 2000,1500);
+        UserDTO userDTO = new UserDTO(1L, "Test", "test@test.com", 2000,1500);
         when(userService.getUserById(1L)).thenReturn(userDTO);
 
         // WHEN & THEN
         mockMvc.perform(get("/v1/users/1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(1))
-                .andExpect(jsonPath("$.username").value("TestUser"))
-                .andExpect(jsonPath("$.email").value("test@example.com"))
+                .andExpect(jsonPath("$.username").value("Test"))
+                .andExpect(jsonPath("$.email").value("test@test.com"))
                 .andExpect(jsonPath("$.dailyCalorieIntake").value(2000))
                 .andExpect(jsonPath("$.dailyCalorieConsumption").value(1500));
 
@@ -75,8 +67,8 @@ class UserControllerTestSuite {
     @Test
     void testCreateUser() throws Exception {
         // GIVEN
-        UserDTO userDTO = new UserDTO(null, "TestUser", "test@example.com", 2000,1500);
-        UserDTO savedUserDTO = new UserDTO(1L, "TestUser", "test@example.com", 2000,1500);
+        UserDTO userDTO = new UserDTO(null, "Test", "test@test.com", 2000,1500);
+        UserDTO savedUserDTO = new UserDTO(1L, "Test", "test@test.com", 2000,1500);
         when(userService.saveUser(any(UserDTO.class))).thenReturn(savedUserDTO);
         Gson gson = new Gson();
         String json = gson.toJson(userDTO);
@@ -86,8 +78,8 @@ class UserControllerTestSuite {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(json))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.username").value("TestUser"))
-                .andExpect(jsonPath("$.email").value("test@example.com"))
+                .andExpect(jsonPath("$.username").value("Test"))
+                .andExpect(jsonPath("$.email").value("test@test.com"))
                 .andExpect(jsonPath("$.dailyCalorieIntake").value(2000))
                 .andExpect(jsonPath("$.dailyCalorieConsumption").value(1500));
 
@@ -98,7 +90,7 @@ class UserControllerTestSuite {
     void testUpdateUser() throws Exception {
         // GIVEN
         Long id = 1L;
-        UserDTO userDTO = new UserDTO(id, "UpdatedUser", "updated@example.com", 2500,1500);
+        UserDTO userDTO = new UserDTO(id, "UpdatedTest", "updated@test.com", 2500,1500);
         when(userService.updateUser(any(UserDTO.class), anyLong())).thenReturn(userDTO);
         Gson gson = new Gson();
         String json = gson.toJson(userDTO);
@@ -109,8 +101,8 @@ class UserControllerTestSuite {
                         .content(json))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(id))
-                .andExpect(jsonPath("$.username").value("UpdatedUser"))
-                .andExpect(jsonPath("$.email").value("updated@example.com"))
+                .andExpect(jsonPath("$.username").value("UpdatedTest"))
+                .andExpect(jsonPath("$.email").value("updated@test.com"))
                 .andExpect(jsonPath("$.dailyCalorieIntake").value(2500))
                 .andExpect(jsonPath("$.dailyCalorieConsumption").value(1500));
 

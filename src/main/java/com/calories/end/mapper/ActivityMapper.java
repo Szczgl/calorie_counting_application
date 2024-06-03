@@ -18,8 +18,8 @@ public class ActivityMapper {
         activityDTO.setName(activity.getName());
         activityDTO.setDescription(activity.getDescription());
         activityDTO.setConsumedCalories(activity.getConsumedCalories());
-        activityDTO.setUserId(activity.getId());
-
+        activityDTO.setUserId(activity.getUser().getId());
+        activityDTO.setSource(activity.getSource());
         return activityDTO;
     }
 
@@ -29,7 +29,7 @@ public class ActivityMapper {
         activity.setName(activityDTO.getName());
         activity.setDescription(activityDTO.getDescription());
         activity.setConsumedCalories(activityDTO.getConsumedCalories());
-
+        activity.setSource(activityDTO.getSource());
         return activity;
     }
 }

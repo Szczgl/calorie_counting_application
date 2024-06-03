@@ -3,7 +3,6 @@ package com.calories.end.recipe;
 
 import com.calories.end.dto.IngredientDTO;
 import com.calories.end.dto.RecipeDTO;
-import com.calories.end.mapper.RecipeMapper;
 import com.calories.end.services.RecipeService;
 import com.google.gson.Gson;
 import org.junit.jupiter.api.Test;
@@ -30,9 +29,6 @@ class RecipeControllerTestSuite {
 
     @MockBean
     private RecipeService recipeService;
-
-    @MockBean
-    private RecipeMapper recipeMapper;
 
     @Test
     void testGetAllRecipes() throws Exception {

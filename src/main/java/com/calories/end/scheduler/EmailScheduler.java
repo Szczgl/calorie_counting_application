@@ -29,7 +29,6 @@ public class EmailScheduler {
             double calorieDeficit = calorieIntake - calorieConsumption;
 
             String message = String.format("Hi %s, your daily calorie deficit/intake is: %.2f", userDTO.getUsername(), calorieDeficit);
-
             emailService.sendCalorieReport(userDTO.getEmail(), "Daily Calorie Report", message);
         }
     }

@@ -6,11 +6,13 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ActivityDTO {
+
     private Long id;
     private String name;
     private String description;
     private double consumedCalories;
     private Long userId;
+    private String source;
 
     public ActivityDTO(Long id, String name, String description, double consumedCalories) {
         this.id = id;

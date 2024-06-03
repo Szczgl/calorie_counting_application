@@ -1,6 +1,7 @@
 package com.calories.end.services.edamam;
 
 public class EdamamParsed {
+
     private EdamamFoodItem food;
 
     public EdamamFoodItem getFood() {

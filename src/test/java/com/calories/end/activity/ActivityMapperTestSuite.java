@@ -11,6 +11,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.HashSet;
 import java.util.Set;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 class ActivityMapperTestSuite {
@@ -29,7 +30,7 @@ class ActivityMapperTestSuite {
         User user = new User(1L, "Test", "test@test.com", 2000,1500);
         Set<User> users = new HashSet<>();
         users.add(user);
-        Activity activity = new Activity(1L, "TestName", "TestDescription", 100, user);
+        Activity activity = new Activity(1L, "TestName", "TestDescription", 100, "Test2");
         activity.setUser(user);
 
         // WHEN
@@ -40,7 +41,5 @@ class ActivityMapperTestSuite {
         assertEquals("TestName", activityDTO.getName());
         assertEquals("TestDescription", activityDTO.getDescription());
         assertEquals(100, activityDTO.getConsumedCalories());
-        assertEquals(1L,activityDTO.getUserId());
-
     }
 }

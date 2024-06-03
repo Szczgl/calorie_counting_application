@@ -4,7 +4,9 @@ import com.calories.end.domain.Ingredient;
 import com.calories.end.dto.IngredientDTO;
 import com.calories.end.mapper.IngredientMapper;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
+
 import java.util.List;
 import java.util.Arrays;
 

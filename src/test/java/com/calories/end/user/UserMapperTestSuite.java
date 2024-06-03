@@ -4,9 +4,10 @@ import com.calories.end.domain.User;
 import com.calories.end.dto.UserDTO;
 import com.calories.end.mapper.UserMapper;
 import org.junit.jupiter.api.Test;
+
 import static org.junit.jupiter.api.Assertions.*;
-import java.util.List;
-import java.util.Arrays;
+
+import java.util.*;
 
 class UserMapperTestSuite {
 

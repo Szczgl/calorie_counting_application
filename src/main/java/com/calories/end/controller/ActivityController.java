@@ -6,6 +6,7 @@ import com.calories.end.exception.ActivityNotFoundException;
 import com.calories.end.exception.UserNotFoundException;
 import com.calories.end.mapper.ActivityMapper;
 import com.calories.end.services.ActivityService;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -32,14 +33,8 @@ public class ActivityController {
         return ResponseEntity.ok(activityService.getActivityById(id));
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ActivityDTO> createActivity(@RequestBody ActivityDTO activityDTO) throws UserNotFoundException {
-        Activity savedActivity = activityService.saveActivity(activityDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(activityMapper.mapToActivityDto(savedActivity));
-    }
-
     @PutMapping("/{id}")
-    public ResponseEntity<ActivityDTO> updateActivity(@RequestBody ActivityDTO activityDTO, @PathVariable Long id) throws ActivityNotFoundException, UserNotFoundException {
+    public ResponseEntity<ActivityDTO> updateActivity(@RequestBody ActivityDTO activityDTO, @PathVariable Long id) throws ActivityNotFoundException, UserNotFoundException, JsonProcessingException {
         return ResponseEntity.ok(activityService.replaceActivity(activityDTO, id));
     }
 
@@ -48,4 +43,11 @@ public class ActivityController {
         activityService.deleteActivityById(id);
         return ResponseEntity.ok().build();
     }
+
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ActivityDTO> createActivity(@RequestBody ActivityDTO activityDTO) throws UserNotFoundException, ActivityNotFoundException, JsonProcessingException {
+        Activity savedActivity = activityService.saveActivity(activityDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(activityMapper.mapToActivityDto(savedActivity));
+    }
 }
+

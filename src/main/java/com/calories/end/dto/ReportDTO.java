@@ -1,6 +1,5 @@
 package com.calories.end.dto;
 
-import com.calories.end.domain.Recipe;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,6 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ReportDTO {
+
     private String username;
     private LocalDate reportDate;
     private double dailyCalorieIntake;

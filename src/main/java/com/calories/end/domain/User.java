@@ -13,6 +13,7 @@ import java.util.List;
 @Entity
 @Table(name = "USERS")
 public class User {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "USER_ID")
@@ -50,10 +51,6 @@ public class User {
         observers.add(observer);
     }
 
-    public void removeObserver(Observer observer) {
-        observers.remove(observer);
-    }
-
     private void notifyObservers() {
         for (Observer observer : observers) {
             observer.update(this);
@@ -65,18 +62,8 @@ public class User {
         notifyObservers();
     }
 
-    public void removeRecipe(Recipe recipe) {
-        recipes.remove(recipe);
-        notifyObservers();
-    }
-
     public void addActivity(Activity activity) {
         this.activity.add(activity);
-        notifyObservers();
-    }
-
-    public void removeActivity(Activity activity) {
-        this.activity.remove(activity);
         notifyObservers();
     }
 

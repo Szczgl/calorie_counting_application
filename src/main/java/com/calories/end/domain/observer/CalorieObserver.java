@@ -5,6 +5,7 @@ import com.calories.end.domain.Recipe;
 import com.calories.end.domain.Activity;
 
 public class CalorieObserver implements Observer {
+
     @Override
     public void update(User user) {
         double totalIntake = user.getRecipes().stream().mapToDouble(Recipe::getTotalCalories).sum();

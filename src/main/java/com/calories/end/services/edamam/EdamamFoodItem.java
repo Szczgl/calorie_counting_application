@@ -1,6 +1,7 @@
 package com.calories.end.services.edamam;
 
 public class EdamamFoodItem {
+
     private String label;
     private EdamamNutrients nutrients;
 
