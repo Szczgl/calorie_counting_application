@@ -5,6 +5,7 @@ import com.calories.end.dto.IngredientDTO;
 import com.calories.end.exception.IngredientNotFoundException;
 import com.calories.end.mapper.IngredientMapper;
 import com.calories.end.repository.IngredientRepository;
+import com.calories.end.repository.RecipeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ public class IngredientService {
 
     private final IngredientRepository ingredientRepository;
     private final IngredientMapper ingredientMapper;
+    private final RecipeRepository recipeRepository;
 
     public List<IngredientDTO> getAllIngredients() {
         return ingredientRepository.findAll().stream()
@@ -46,5 +48,21 @@ public class IngredientService {
         ingredientDto.setId(id);
         Ingredient ingredient = ingredientMapper.mapToIngredient(ingredientDto);
         return ingredientMapper.mapToIngredientDto(ingredientRepository.save(ingredient));
+    }
+
+    public boolean isIngredientInAnyRecipe(Long ingredientId) {
+        return recipeRepository.existsByIngredients_Id(ingredientId);
+    }
+
+    public boolean existsByName(String name) {
+        return ingredientRepository.existsByName(name);
+    }
+
+    public Ingredient createIngredient(IngredientDTO ingredientDTO) {
+        Ingredient ingredient = new Ingredient();
+        ingredient.setName(ingredientDTO.getName());
+        ingredient.setQuantity(ingredientDTO.getQuantity());
+        ingredient.setCalories(ingredientDTO.getCalories());
+        return ingredientRepository.save(ingredient);
     }
 }
