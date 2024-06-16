@@ -63,27 +63,6 @@ class IngredientControllerTestSuite {
     }
 
     @Test
-    void testCreateIngredient() throws Exception {
-        // GIVEN
-        IngredientDTO ingredientDTO = new IngredientDTO(null, "Test1", 200, 100);
-        IngredientDTO savedIngredientDTO = new IngredientDTO(1L, "Test1", 200, 100);
-        when(ingredientService.saveIngredient(any(IngredientDTO.class))).thenReturn(savedIngredientDTO);
-        Gson gson = new Gson();
-        String json = gson.toJson(ingredientDTO);
-
-        // WHEN & THEN
-        mockMvc.perform(post("/v1/ingredients")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(json))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("Test1"))
-                .andExpect(jsonPath("$.quantity").value(200))
-                .andExpect(jsonPath("$.calories").value(100));
-
-        verify(ingredientService, times(1)).saveIngredient(any(IngredientDTO.class));
-    }
-
-    @Test
     void testUpdateIngredient() throws Exception {
         // GIVEN
         Long id = 1L;

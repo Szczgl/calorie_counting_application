@@ -82,4 +82,15 @@ public class User {
         this.dailyCalorieConsumption = calculateDailyCalorieConsumption();
         notifyObservers();
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", email='" + email + '\'' +
+                ", dailyCalorieIntake=" + dailyCalorieIntake +
+                ", dailyCalorieConsumption=" + dailyCalorieConsumption +
+                '}';
+    }
 }

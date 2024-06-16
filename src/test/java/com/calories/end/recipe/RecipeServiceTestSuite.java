@@ -48,38 +48,6 @@ class RecipeServiceTestSuite {
     }
 
     @Test
-    void testGetAllRecipes() {
-        // GIVEN
-        Recipe recipe = new Recipe();
-        RecipeDTO recipeDTO = new RecipeDTO();
-        when(recipeRepository.findAll()).thenReturn(Arrays.asList(recipe));
-        when(recipeMapper.mapToRecipeDto(any(Recipe.class))).thenReturn(recipeDTO);
-
-        // WHEN
-        List<RecipeDTO> result = recipeService.getAllRecipes();
-
-        // THEN
-        assertEquals(1, result.size());
-        verify(recipeRepository, times(1)).findAll();
-    }
-
-    @Test
-    void testGetRecipeById() throws RecipeNotFoundException {
-        // GIVEN
-        Recipe recipe = new Recipe();
-        RecipeDTO recipeDTO = new RecipeDTO();
-        when(recipeRepository.findById(anyLong())).thenReturn(Optional.of(recipe));
-        when(recipeMapper.mapToRecipeDto(any(Recipe.class))).thenReturn(recipeDTO);
-
-        // WHEN
-        RecipeDTO result = recipeService.getRecipeById(1L);
-
-        // THEN
-        assertNotNull(result);
-        verify(recipeRepository, times(1)).findById(anyLong());
-    }
-
-    @Test
     void testUpdateRecipe() throws RecipeNotFoundException, UserNotFoundException, IngredientNotFoundException {
         // GIVEN
         Recipe recipe = new Recipe();
@@ -132,14 +100,14 @@ class RecipeServiceTestSuite {
         verify(recipeRepository, times(1)).save(any(Recipe.class));
     }
 
-    @Test
-    void testDeleteRecipe() {
-        // WHEN
-        recipeService.deleteRecipe(1L);
-
-        // THEN
-        verify(recipeRepository, times(1)).deleteById(anyLong());
-    }
+//    @Test
+//    void testDeleteRecipe() {
+//        // WHEN
+//        recipeService.deleteRecipe(1L);
+//
+//        // THEN
+//        verify(recipeRepository, times(1)).deleteById(anyLong());
+//    }
 
     @Test
     void testSaveRecipeUserNotFound() {

@@ -1,5 +1,6 @@
 package com.calories.end.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -9,7 +10,7 @@ import java.util.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "RECIPES")
+@Table(name = "RECIPES", schema = "PUBLIC")
 public class Recipe {
 
     @Id
@@ -30,10 +31,11 @@ public class Recipe {
     @JoinColumn(name = "USER_ID", referencedColumnName = "USER_ID")
     private User user;
 
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "RECIPE_INGREDIENT",
             joinColumns = @JoinColumn(name = "RECIPE_ID"),
             inverseJoinColumns = @JoinColumn(name = "INGREDIENT_ID"))
+    @JsonManagedReference
     private Set<Ingredient> ingredients = new HashSet<>();
 
     public Recipe(Long id, String name, String description, double totalCalories) {
@@ -41,5 +43,16 @@ public class Recipe {
         this.name = name;
         this.description = description;
         this.totalCalories = totalCalories;
+    }
+
+    @Override
+    public String toString() {
+        return "Recipe{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", description='" + description + '\'' +
+                ", totalCalories=" + totalCalories +
+                ", user=" + (user != null ? user.getId() : null) +
+                '}';
     }
 }

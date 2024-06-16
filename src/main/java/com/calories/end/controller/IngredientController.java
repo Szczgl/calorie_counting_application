@@ -4,6 +4,7 @@ import com.calories.end.domain.Ingredient;
 import com.calories.end.dto.IngredientDTO;
 import com.calories.end.exception.IngredientNotFoundException;
 import com.calories.end.services.IngredientService;
+import com.calories.end.services.edamam.EdamamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +17,7 @@ import java.util.List;
 public class IngredientController {
 
     private final IngredientService ingredientService;
+    private final EdamamService edamamService;
 
     @GetMapping
     public ResponseEntity<List<IngredientDTO>> getAllIngredients() {
@@ -55,6 +57,15 @@ public class IngredientController {
         }
         Ingredient newIngredient = ingredientService.createIngredient(ingredientDTO);
         return ResponseEntity.ok(newIngredient);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<IngredientDTO> searchIngredientInEdamam(@RequestParam String name) {
+        try {
+            return ResponseEntity.ok(edamamService.searchIngredientByName(name));
+        } catch (IngredientNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }
 

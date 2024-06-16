@@ -31,15 +31,65 @@ public class RecipeService {
     private final EdamamService edamamService;
 
     public List<RecipeDTO> getAllRecipes() {
-        return recipeRepository.findAll().stream()
-                .map(recipeMapper::mapToRecipeDto)
-                .collect(Collectors.toList());
+        List<Object[]> results = recipeRepository.findAllWithIngredients();
+
+        Map<Long, RecipeDTO> recipeMap = new HashMap<>();
+        for (Object[] result : results) {
+            Long recipeId = ((Number) result[0]).longValue();
+            RecipeDTO recipe = recipeMap.computeIfAbsent(recipeId, id -> {
+                RecipeDTO r = new RecipeDTO();
+                r.setId(id);
+                r.setName((String) result[1]);
+                r.setDescription((String) result[2]);
+                r.setTotalCalories((Double) result[3]);
+                r.setUserId(((Number) result[4]).longValue());
+                r.setIngredients(new ArrayList<>());
+                return r;
+            });
+
+            if (result[5] != null) {
+                IngredientDTO ingredient = new IngredientDTO();
+                ingredient.setId(((Number) result[5]).longValue());
+                ingredient.setName((String) result[6]);
+                ingredient.setQuantity((Double) result[7]);
+                ingredient.setCalories((Double) result[8]);
+                recipe.getIngredients().add(ingredient);
+            }
+        }
+        return new ArrayList<>(recipeMap.values());
     }
 
     public RecipeDTO getRecipeById(Long id) throws RecipeNotFoundException {
-        Recipe recipe = recipeRepository.findById(id)
-                .orElseThrow(() -> new RecipeNotFoundException("Recipe not found with id: " + id));
-        return recipeMapper.mapToRecipeDto(recipe);
+        List<Object[]> results = recipeRepository.findByIdWithIngredients(id);
+        if (results.isEmpty()) {
+            throw new RecipeNotFoundException("Recipe not found with id: " + id);
+        }
+
+        Map<Long, RecipeDTO> recipeMap = new HashMap<>();
+        for (Object[] result : results) {
+            Long recipeId = ((Number) result[0]).longValue();
+            RecipeDTO recipe = recipeMap.computeIfAbsent(recipeId, rid -> {
+                RecipeDTO r = new RecipeDTO();
+                r.setId(rid);
+                r.setName((String) result[1]);
+                r.setDescription((String) result[2]);
+                r.setTotalCalories((Double) result[3]);
+                r.setUserId(((Number) result[4]).longValue());
+                r.setIngredients(new ArrayList<>());
+                return r;
+            });
+
+            if (result[5] != null) {
+                IngredientDTO ingredient = new IngredientDTO();
+                ingredient.setId(((Number) result[5]).longValue());
+                ingredient.setName((String) result[6]);
+                ingredient.setQuantity((Double) result[7]);
+                ingredient.setCalories((Double) result[8]);
+                recipe.getIngredients().add(ingredient);
+            }
+        }
+        RecipeDTO recipeDto = recipeMap.values().iterator().next();
+        return recipeDto;
     }
 
     @Transactional
@@ -69,7 +119,7 @@ public class RecipeService {
     }
 
     @Transactional
-    public RecipeDTO replaceRecipe(RecipeDTO recipeDto, Long id) throws RecipeNotFoundException, UserNotFoundException, IngredientNotFoundException {
+    public RecipeDTO replaceRecipe(RecipeDTO recipeDto, Long id) throws RecipeNotFoundException, UserNotFoundException {
         Recipe existingRecipe = recipeRepository.findById(id)
                 .orElseThrow(() -> new RecipeNotFoundException("Recipe not found with id: " + id));
 
@@ -79,6 +129,7 @@ public class RecipeService {
         User user = userRepository.findById(recipeDto.getUserId())
                 .orElseThrow(() -> new UserNotFoundException("User not found with id: " + recipeDto.getUserId()));
         existingRecipe.setUser(user);
+        recipeRepository.deleteIngredientsByRecipeId(id);
 
         Set<Ingredient> ingredients = recipeDto.getIngredients().stream()
                 .map(ingredientDto -> {
@@ -106,7 +157,6 @@ public class RecipeService {
     private Ingredient findOrCreateIngredient(IngredientDTO ingredientDto) throws IngredientNotFoundException {
         Ingredient existingIngredient = ingredientRepository.findByName(ingredientDto.getName()).orElse(null);
         if (existingIngredient != null) {
-            existingIngredient.setQuantity(existingIngredient.getQuantity() + ingredientDto.getQuantity());
             return existingIngredient;
         } else {
             IngredientDTO fetchedIngredient = edamamService.searchIngredientByName(ingredientDto.getName());
