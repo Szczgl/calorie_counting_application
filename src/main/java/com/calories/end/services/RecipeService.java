@@ -102,7 +102,10 @@ public class RecipeService {
         Set<Ingredient> ingredients = recipeDto.getIngredients().stream()
                 .map(ingredientDto -> {
                     try {
-                        return findOrCreateIngredient(ingredientDto);
+                        Ingredient ingredient = findOrCreateIngredient(ingredientDto);
+                        ingredient.setQuantity(ingredientDto.getQuantity());
+                        ingredient.setCalories(ingredientDto.getCalories());
+                        return ingredient;
                     } catch (IngredientNotFoundException e) {
                         throw new RuntimeException(e);
                     }
@@ -134,7 +137,10 @@ public class RecipeService {
         Set<Ingredient> ingredients = recipeDto.getIngredients().stream()
                 .map(ingredientDto -> {
                     try {
-                        return findOrCreateIngredient(ingredientDto);
+                        Ingredient ingredient = findOrCreateIngredient(ingredientDto);
+                        ingredient.setQuantity(ingredientDto.getQuantity());
+                        ingredient.setCalories(ingredientDto.getCalories());
+                        return ingredient;
                     } catch (IngredientNotFoundException e) {
                         throw new RuntimeException(e);
                     }
